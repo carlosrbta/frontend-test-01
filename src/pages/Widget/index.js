@@ -47,14 +47,13 @@ function WidgetPage() {
     return item;
   };
 
+  const widgetsWithFilter = widgets.filter((e) => onFilter(e));
+
   const RenderNoResults = () =>
-    widgets.filter((e) => onFilter(e)).length == 0 && (
-      <div>No results for {search}.</div>
-    );
+    widgetsWithFilter.length === 0 && <div>No results for {search}.</div>;
 
   const RenderWidgets = () =>
-    widgets
-      .filter((e) => onFilter(e))
+    widgetsWithFilter
       .sort((a, b) => a.title.localeCompare(b.title))
       .map((item) => (
         <WidgetCard
