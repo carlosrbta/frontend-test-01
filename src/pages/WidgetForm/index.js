@@ -8,8 +8,8 @@ import { widgetsKey } from "../../constants";
 import "./index.css";
 
 function WidgetFormPage() {
-  const [formTitle, setTitle] = useState();
-  const [formSeries, setSeries] = useState();
+  const [formTitle, setTitle] = useState("");
+  const [formSeries, setSeries] = useState("");
   const [errors, setErrors] = useState({});
 
   const [widgets, setWidgets] = useLocalStorage(widgetsKey, []);
@@ -31,11 +31,13 @@ function WidgetFormPage() {
     let valid = true;
     let result = { ...errors };
 
+    // Form title should not be empty
     if (!formTitle || formTitle === "") {
       result = { ...result, title: true };
       valid = false;
     }
 
+    // Form series should not be empty
     if (!formSeries || formSeries === "") {
       result = { ...result, series: true };
       valid = false;
@@ -52,17 +54,22 @@ function WidgetFormPage() {
 
     const maxValue = maxBy(widgets, "id") || { id: 0 };
 
-    const result = formSeries
+    const series = formSeries
+      // Remove spaces
       .replace(/\s/g, "")
+      // String into array
       .split(",")
-      .map((x) => parseInt(x, 10));
+      // String to number
+      .map((x) => parseInt(x, 10))
+      // Only numbers
+      .filter((x) => Number(x));
 
     setWidgets([
       ...widgets.filter((e) => e.id !== Number(id)),
       {
         id: Number(id) || maxValue.id + 1,
         title: formTitle,
-        series: result,
+        series: series,
       },
     ]);
 
