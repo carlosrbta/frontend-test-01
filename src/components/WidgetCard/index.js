@@ -1,39 +1,49 @@
-import React, { useRef } from "react";
-import {
-  Container,
-  NavDropdown,
-  Button,
-  Card,
-  Dropdown,
-} from "react-bootstrap";
+import React from "react";
+import { Card, Dropdown } from "react-bootstrap";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
+import ToogleButton from "../ToogleButton";
 import "./index.css";
 
-function WidgetCard() {
+function WidgetCard({ widget, onClickEdit, onClickRemove }) {
+  if (!widget) return null;
+
   const options = {
+    series: [
+      {
+        data: widget.series || [],
+      },
+    ],
+    legend: {
+      enabled: false,
+    },
+    yAxis: {
+      title: {
+        enabled: false,
+      },
+    },
     title: {
       text: "",
     },
-    series: [
-      {
-        data: [1, 2, 3, 3, 2, 4, 1],
-      },
-    ],
+    chart: {
+      height: 250,
+    },
   };
-
-  const chartRef = useRef();
 
   return (
     <Card>
       <Card.Header>
-        Featured
-        <Dropdown>
-          <Dropdown.Toggle></Dropdown.Toggle>
+        {widget.title}
+        <Dropdown alignRight>
+          <Dropdown.Toggle as={ToogleButton}></Dropdown.Toggle>
 
           <Dropdown.Menu>
-            <Dropdown.Item href="#/action-1">Edit</Dropdown.Item>
-            <Dropdown.Item href="#/action-2">Remove</Dropdown.Item>
+            <Dropdown.Item onClick={() => onClickEdit(widget.id)}>
+              Edit
+            </Dropdown.Item>
+            <Dropdown.Item onClick={() => onClickRemove(widget.id)}>
+              Remove
+            </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
       </Card.Header>
